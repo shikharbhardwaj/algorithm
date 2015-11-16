@@ -38,3 +38,4 @@ class graph<attrib, graph_type,
                   std::cout<<"\nThis is a matrix!";
               }
       };
+
