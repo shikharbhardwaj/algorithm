@@ -1,21 +1,18 @@
-#include <sstream>
-#include <type_traits>
-#include <vector>
+// An implementation of an undirected graph using the C++ std library
+#include    <type_traits>
+#include    <iostream>
+#include    <map>
+#include    <vector>
 namespace graph_types{
     class list;
     class matrix;
 }
 template <typename attrib>
-class vertex {
+struct vertex {
     attrib id;
-    public:
     vertex(int in){
         id = in;
     }
-};
-template <typename attrib>
-class edge {
-    vertex<attrib> u, v;
 };
 
 template <class attrib, class graph_type, typename enable = void>
@@ -24,20 +21,34 @@ class graph;
 template <typename attrib, class graph_type>
 class graph<attrib, graph_type, 
       typename std::enable_if <std::is_same <graph_type, graph_types::list>::value>::type> {
+          using vtype = vertex<attrib>;
           //This is an adjacency list representation
           private:
-              std::vector<std::vector<vertex<attrib>>> adj_list;
+                std::map<attrib, std::vector<attrib>> adj_list;
+                std::map<attrib, vtype> vertices;
           public:
               graph() = default;
-              void input(std::istringstream &in){
-                  unsigned num_vertices;
-                  int cur_id;
-                  in >> num_vertices;
-                  adj_list.reserve(num_vertices);
-                  for(unsigned i = 0;i < num_vertices;i++){
-                      adj_list.push_back({});
-                      while(in >> cur_id){
-                          adj_list[i].push_back(cur_id);
+              void add_vertex(vtype v1){
+                  if(adj_list.count(v1.id) == 0){
+                      adj_list.insert(std::pair<attrib, std::vector<attrib>>(v1.id, {}));
+                      vertices.insert(std::pair<attrib, vtype>(v1.id, v1));
+                  }
+              }
+              void add_edge(vtype v1, vtype v2){
+                  add_vertex(v1);
+                  add_vertex(v2);
+                  adj_list[v1.id].push_back(v2.id);
+                  adj_list[v2.id].push_back(v1.id);
+              }
+              void BFS(attrib source){
+                  for(auto vertex : adj_list[source]){
+                  }
+              }
+              void dump(){
+                  for(auto it = adj_list.begin(); it != adj_list.end(); it++){
+                      std::cout<<"\nVec["<<it->first<<"]";
+                      for(auto elem : it->second){
+                          std::cout<<"->"<<elem;
                       }
                   }
               }
@@ -47,7 +58,8 @@ template <typename attrib, class graph_type>
 class graph<attrib, graph_type, 
       typename std::enable_if <std::is_same <graph_type, graph_types::matrix>::value>::type> {
           //This is an adjacency matrix representation
-          private: std::vector<std::vector<vertex<attrib>>> adj_matrix;
+          private: 
+              std::vector<std::vector<vertex<attrib>>> adj_matrix;
           public:
                    graph() = default;
       };
