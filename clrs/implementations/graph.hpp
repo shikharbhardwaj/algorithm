@@ -1,7 +1,7 @@
 // An implementation of an undirected graph using the C++ std library
 #include    <type_traits>
 #include    <iostream>
-#include    <map>
+#include    <unordered_map>
 #include    <vector>
 namespace graph_types{
     class list;
@@ -24,8 +24,8 @@ class graph<attrib, graph_type,
           using vtype = vertex<attrib>;
           //This is an adjacency list representation
           private:
-                std::map<attrib, std::vector<attrib>> adj_list;
-                std::map<attrib, vtype> vertices;
+                std::unordered_map<attrib, std::vector<attrib>> adj_list;
+                std::unordered_map<attrib, vtype> vertices;
           public:
               graph() = default;
               void add_vertex(vtype v1){
@@ -35,8 +35,6 @@ class graph<attrib, graph_type,
                   }
               }
               void add_edge(vtype v1, vtype v2){
-                  add_vertex(v1);
-                  add_vertex(v2);
                   adj_list[v1.id].push_back(v2.id);
                   adj_list[v2.id].push_back(v1.id);
               }
