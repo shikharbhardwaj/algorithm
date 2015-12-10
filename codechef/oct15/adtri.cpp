@@ -1,8 +1,8 @@
 #include <cstdio>
 #include <cmath>
 #include <vector>
-//Final solution : OCT15/ADTRI
 #define gc getchar_unlocked
+//Final solution : OCT15/ADTRI
 int numbers[3500], len;     //For the prime test
 int memo[5000001];          //Memo for the answers
 std::vector<int> pythoPrimes;   //A list of primes of the form 4k+1
@@ -99,8 +99,7 @@ void generatePythoPrime(){
     }
 }
 int main(){
-    int T;
-    int n;
+    int T,n;
     generate();
     generatePythoPrime();
     bool ans = false;

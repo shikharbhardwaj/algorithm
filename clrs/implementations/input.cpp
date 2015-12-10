@@ -2,7 +2,7 @@
 #include <functional>
 #include <vector>
 #include <tuple>
-#include <tuple>
+#include <experimental/tuple>
 
 namespace inputmagic {
 
@@ -126,7 +126,7 @@ namespace inputmagic {
     template <typename T, typename... Msg>
         auto read_line(T& v, Msg&&... msg) {
             auto prompter = [stored=std::make_tuple(std::forward<Msg>(msg)...)](std::ostream& os) { 
-                std::apply(stream_to{os}, stored);
+                std::experimental::apply(stream_to{os}, stored);
             };
             auto reader   = [](std::istream& is, std::string& v) -> auto& { return std::getline(is, v); };
 
@@ -158,7 +158,7 @@ int main() {
     if (cin >> read_line(lname, "Input customer's lastname (previous: '", std::ref(lname), "'): ")
             .validate(alpha_only,                         "You can only input alpha here!")
             .validate([](auto& s) { return !s.empty(); }, "Last name can not be empty")
-            .validate(correct_space,                      "Cannot have spaces there"))
+            .validate(correct_space,                      "Cannot begin with spaces"))
     {
         cout << "Success: " << lname << "\n";
     }

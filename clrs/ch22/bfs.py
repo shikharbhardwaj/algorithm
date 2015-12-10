@@ -6,15 +6,15 @@ def BFS(source, adj):
     i = 1
     frontier = [source]
     while frontier:
-        next = []
+        after = []
         for u in frontier:
             for v in adj[u]:
                 if v not in level:
                     print("Found node %d at %d level " % (v, i))
                     level[v] = i
                     parent[v] = u
-                    next.append(v)
-        frontier = next
+                    after.append(v)
+        frontier = after
         i += 1
     #After the loop has ended, display the findings : 
     print("\nLevels : ")
@@ -29,3 +29,5 @@ def fact(inp):
     if inp == 1:
         return 1
     return inp*fact(inp-1);
+if __name__ == "__main__":
+    print("Breadth first search implemented in Python")
