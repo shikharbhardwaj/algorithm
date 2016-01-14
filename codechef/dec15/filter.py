@@ -1,7 +1,6 @@
 def num_filter_combinations(filters, image):
     # Construct matrix from filters + image (simple transpose).
     M = [list(tup) for tup in zip(*(filters + [image]))]
-
     # Gaussian elimination over GF(2).
     last_pivot = -1
     n, m = len(M), len(M[0])
@@ -15,10 +14,12 @@ def num_filter_combinations(filters, image):
                         for t in range(m):
                             M[k][t] ^= M[i][t]
                 break
-
+    for row in M:
+        print(row)
     # Check for inconsistent matrix.
     for row in M:
         if not any(row[:-1]) and row[-1]:
+            print("lol")
             return 0
 
     # Number of filter combations is 2 to the power of the number of free variables.
@@ -27,8 +28,8 @@ def num_filter_combinations(filters, image):
 
 filters = [
     [1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-    [0,  0,  0,  0, 0, 0, 0, 0, 0], 
-    [1,  0,  0,  0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
 image = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]

@@ -10,9 +10,9 @@ namespace graph_types{
 template <typename attrib>
 struct vertex {
   attrib id;
-  vertex(int in){
-    id = in;
-  }
+  attrib weight;
+  vertex() = default;
+  vertex(attrib in, attrib win) : id(in), weight(win) {}
 };
 
 template <class attrib, class graph_type, typename enable = void>
@@ -34,9 +34,9 @@ class graph<attrib, graph_type,
             vertices.insert(std::pair<attrib, vtype>(v1.id, v1));
           }
         }
-        void add_edge(vtype v1, vtype v2){
-          adj_list[v1.id].push_back(v2.id);
-          adj_list[v2.id].push_back(v1.id);
+        void add_edge(attrib id1, attrib id2){
+          adj_list[id1].push_back(id2);
+          adj_list[id2].push_back(id1);
         }
         void BFS(attrib src){
           std::unordered_map<attrib, int> level;
@@ -55,11 +55,43 @@ class graph<attrib, graph_type,
                   parent[v] = u;
                   next.push_back(v);
                 }
+              } }
+            frontier = std::move(next);
+            cur_level++;
+          }
+        }
+        bool path_exists(attrib id1, attrib id2){
+          std::unordered_map<attrib, int> level;
+          std::unordered_map<attrib, attrib> parent;
+          std::vector<attrib> frontier;
+          std::vector<attrib> next;
+          int cur_level = 1;
+          frontier.push_back(id1);
+          while(frontier.empty() == false){
+            next = {};
+            for(auto u : frontier){
+              for(auto v : adj_list[u]){
+                if(level.count(v) == 0){ //If we have not visited this node earlier
+                  if(v == id2){
+                    //Destination found
+                    return true;
+                  }
+                  level[v] = cur_level;
+                  parent[v] = u;
+                  next.push_back(v);
+                }
               }
             }
             frontier = std::move(next);
             cur_level++;
           }
+          return false;
+        }
+        vtype get_vertex(attrib id){
+          return vertices[id];
+        }
+        decltype(auto) get_list(attrib id){
+          return adj_list[id];
         }
         void dump(){
           int first = 1;

@@ -1,0 +1,76 @@
+#include <algorithm>
+#include <iostream>
+#include <vector>
+#include <limits>
+#include <map>
+//Group according to the A/B ratio and find the max
+int A[100001];
+int B[100001];
+int C[100001];
+int gcd(int a, int b){
+  if(b == 0){
+    return -1;
+  }
+  if(a%b == 0){
+    return  b;
+  }
+  return gcd(b, a%b);
+}
+bool compare_f(float left, float right){
+  return (abs(left - right) > std::numeric_limits<float>::epsilon()) && (left < right);
+}
+int main(){
+  std::ios_base::sync_with_stdio(false);
+  int T, N;
+  std::cin>>T;
+  while(T--){
+    std::vector<std::pair<float, int>> ratios;
+    std::vector<int> parallels;
+    std::vector<int> max;
+    std::cin>>N;
+    for(int i = 0; i < N; i++){
+      std::cin>>A[i]>>B[i]>>C[i];
+      int div;
+      if(B[i] == 0){
+        div = gcd(A[i], C[i]);
+      }
+      else{
+        div = gcd(A[i], gcd(A[i], C[i]));
+      }
+      if(div != -1){
+        A[i] /= div;
+        B[i] /= div;
+        C[i] /= div;
+      }
+      if(B[i] != 0){
+        ratios.push_back(std::make_pair(A[i]/B[i], i));
+      }
+      else{
+        parallels.push_back(i);
+      }
+    }
+    int cur;
+    if(parallels.size() != 0){
+      cur = C[parallels[0]];
+      max.push_back(1);
+    }
+    for(auto elem : parallels){
+      if(C[elem] == cur){
+        continue;
+      }
+      else{
+        max[0]++;
+      }
+    }
+    std::sort(ratios.begin(), ratios.end(), [](auto const & left, auto const & right){
+          return (abs(left.first - right.first) > std::numeric_limits<float>::epsilon()) && (left.first < right.first);
+        });
+    float cur_slope = 0;
+    if(ratios.size() != 0){
+      cur_slope = ratios.
+    }
+    for(auto elem : ratios){
+      
+    }
+  }
+}
