@@ -7,7 +7,7 @@
 #include <random>
 #include <cmath>
 std::random_device rng;
-std::mt19937 dist(rng());   //Generate some pseudo random numbers
+std::mt19937 dist(rng());
 std::uniform_int_distribution<int> generator(0, 1023);
 template <typename iter,
          typename T = typename std::iterator_traits<iter>::value_type,
@@ -73,15 +73,15 @@ void shell_sub(iter begin, iter end, int jump) {
 template <typename iter,
          typename T = typename std::iterator_traits<iter>::value_type,
          class comp = std::less<T>>
-void shell_sort(iter begin, iter end) {
+void shell_sort(iter begin, iter end){
     //Using Knuth's divine advice
     int t = (log10(end - begin) / log10(3)) - 1;
     std::vector<int> seq(t);
     seq[0] = 1;
-    for(int i = 1; i < t; i++) { //Generate the jump sequence
+    for(int i = 1; i < t; i++){ //Generate the jump sequence
         seq[i] = 3 * seq[i-1] + 1;
     }
-    while(t--) {
+    while(t--){
         shell_sub(begin, end, seq[t]);
     }
 }
@@ -94,7 +94,7 @@ int main() {
     shell_sort(lol.begin(), lol.end());
     auto t2 = std::chrono::high_resolution_clock::now();
     std::cout<<"\nTime taken : "
-    << std::chrono::duration_cast<std::chrono::microseconds>(t2-t1).count();
+            <<std::chrono::duration_cast<std::chrono::microseconds>(t2-t1).count();
     assert(std::is_sorted(lol.begin(), lol.end()));
 }
 

@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <iterator>
+//A simple implementation of a heapsort
+//
+//max_heapify : takes the index and establishes the max_heap property
+//              at that index, assuming the heaps rooted at the children
+//              are already max heaps.
+template <typename T>
+class heap{
+    private:
+        std::vector<T> tree;
+    public:
+        heap() = default;
+        heap(const std::vector<T> &other)   : tree{ other } {}
+        heap(std::vector<T> &&other)        : tree{ other } {}
+        heap(const heap &other)             : tree{ other.tree } {}
+        heap(heap &&other) : tree{other.tree} {}
+        heap& operator=(const heap& other){
+            if( &other != this ){
+                this->tree = std::move(other.tree);
+            }
+        }
+        void max_heapify(size_t index){
+            if(2*index + 1 < tree.size()){
+
+            }
+        }
+};
+int main() {
+    std::vector<int> lol = {1,2,3,4,5,6,7};
+    for(auto elem : lol) {
+        std::cout<<" : "<<elem;
+    }
+}
+
