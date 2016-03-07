@@ -4,46 +4,46 @@
 typedef unsigned long long ull;
 #define MAX 1000000007
 #define CACHE 10000
-int nums[100001]; int sums1[CACHE]; int sums2[CACHE]; int sums3[CACHE];
-int sums(int n, int times){
+#define DEPTH 100
+int nums[100001]; 
+int sums[DEPTH][CACHE]; //This is not working out
+int sum(int n, int times){
+    if( n == 0 ){
+        return 0;
+    }
     if( times == 0 ){
         return 1;
     }
     if( times == 1 ){
         return n % MAX;
     }
-    if( n < CACHE ){
-        if(times == 2){
-            return sums1[n];
-        }
-        if( times == 3 ){
-            return sums2[n];
-        }
-        if( times == 4 ){
-            return sums3[n];
-        }
+    //Memo
+    if( n < CACHE && times < DEPTH ){
+        return sums[times-1][n];
+    }
+    if( times == 2 ){
+        return ((((long(n) * n)/2) % MAX + n/2) % MAX);
+    }
+    if( times == 3 ){
+        return ((ull(n) * (n+1) * (n+2))/6) % MAX;
     }
     ull ret = 0;
     for( int i = 1; i <= n; i++ ){
-        ret += (sums(i, times-1) % MAX);
+        ret += (sum(i, times-1) % MAX);
     }
     return ret % MAX;
 }
 void fill_sums(){
-    sums1[0] = 0; sums1[1] = 1;
-    sums2[0] = 0; sums2[1] = 1;
-    sums3[0] = 0; sums3[1] = 1;
-    for(int i = 2; i < CACHE; i++){
-        sums1[i] = i + sums1[i-1];
-        sums1[i] %= MAX;
+    //Fill the memo
+    for(int i = 0; i < CACHE ; i++){
+        sums[0][i] = i;
     }
-    for(int i = 2; i < CACHE; i++){
-        sums2[i] = sums1[i] + sums1[i-1];
-        sums2[i] %= MAX;
-    }
-    for(int i = 2; i < CACHE; i++){
-        sums3[i] = sums2[i] + sums3[i-1];
-        sums3[i] %= MAX;
+    for(int i = 1 ; i < DEPTH ; i++){
+        sums[i][0] = 0; sums[i][1] = 1;
+        for(int j = 2; j < CACHE; j++){
+            sums[i][j] = sums[i-1][j] + sums[i][j-1];
+            sums[i][j] %= MAX;
+        }
     }
 }
 int main(){
@@ -60,9 +60,10 @@ int main(){
         }
         unsigned long long ans = 0;
         for(int i = x; i >= 1; i--){
-            ans += (sums(M, x-i) * (ull)nums[i]) % MAX;
+            ans += (sum(M, x-i) * (ull)nums[i]) % MAX;
         }
         ans = ans % MAX;
         printf("%llu\n", ans);
     }
 }
+

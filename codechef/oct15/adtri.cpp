@@ -7,15 +7,6 @@ int numbers[3500], len;     //For the prime test
 int memo[5000001];          //Memo for the answers
 std::vector<int> pythoPrimes;   //A list of primes of the form 4k+1
 std::vector<int> notPythonPrimes;  //The complement of the above 
-void getfast_int(int &x){
-    int c = gc();
-    x = 0;
-    int neg = 0;
-    for(;((c<48 || c>57) && c != '-');c = gc());
-    if(c=='-') {neg=1;c=gc();}
-    for(;c>47 && c<58;c = gc()) {x = (x<<1) + (x<<3) + c - 48;}
-    if(neg) x=-x;
-}
 inline bool prime(int x){
     unsigned int i, last = sqrt(x);
     for (i = 2; i <= last; i++){
@@ -103,12 +94,12 @@ int main(){
     generate();
     generatePythoPrime();
     bool ans = false;
-    getfast_int(T);
+    scanf("%d", &T);
     for(int i = 0; i < 5000001;i++){
         memo[i] = -1;
     }
     while(T--){
-        getfast_int(n);
+        scanf("%d", &n);
         if(memo[n] != -1){
             ans = memo[n];
         }
@@ -117,10 +108,10 @@ int main(){
             memo[n] = ans;
         }
         if(ans){
-            puts("YES");
+            printf("1\n");
         }
         else{
-            puts("NO");
+            printf("0\n");
         }
     }
     return 0;
