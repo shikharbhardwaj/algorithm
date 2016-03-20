@@ -15,7 +15,7 @@ struct segTreeNode{
 };
 segTreeNode *tree;
 int getSegTreeSize(int n){
-    float logVal = log2(n);     //The hieght of the tree
+    float logVal = log2(n);     //The height of the tree
     if(logVal == (int)logVal){
         return 2*n;
     }

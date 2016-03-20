@@ -1,41 +1,37 @@
 #include <iostream>
 #include <algorithm>
-bool is_similar(const std::string &first, const std::string &second){
-    //Naive check for two similar strings
-    //has nothing to do with the final solution so forget about this
-    if( first.length() != second.length() ){
-        return false;
+#include <vector>
+#include <array>
+const long long MAX = 1e9 + 7;
+long long fact(long long n){
+    long long ret = 1;
+    for( long long i = 2; i <= n; i++ ){
+        ret *= i;
     }
-    if( first == second ){
-        return true;
-    }
-    auto res = first;
-    for( size_t i = 0; i < first.length() - 1; i++ ){
-        for( size_t j = i + 1; j < first.length(); j++ ){
-            std::swap(res[i], res[j]);
-            if( res == second ){
-                return true;
-            }
-            res = first;
-        }
-    }
-    return false;
+    return ret;
 }
-int count_not_similar(const std::string &in){
-    auto val = in;
-    std::sort(in.begin(), in.end());
-    //This is shitty,
-    //basically question of PnC 
-    //May need Fermat's little theorem when you have the final formula
-    return 0;
+long long compute(const std::string &in){
+    if( in.size() <= 1) {
+        return 0;
+    }
+    std::array<long long, 26> freq;
+    std::generate(freq.begin(), freq.end(), []{ return 0; });
+    for( auto elem : in ){
+        freq[elem-'a']++;
+    }
+    long long ans = fact(in.size()) * fact(in.size()-1);
+    for( auto elem : freq ){
+        ans /= (fact(elem));
+    }
+    return ans % MAX;
 }
 int main(){
-    //std::ios_base::sync_with_stdio(false);
-    //int T;
-    //std::string in;
-    //std::cin>>T;
-    //while(T--){
-        //std::cin>>in;
-    //}
-    std::cout<<std::boolalpha<<is_similar("abcd", "abcd");
+    std::ios_base::sync_with_stdio(false);
+    long long T;
+    std::string in;
+    std::cin>>T;
+    while(T--){
+        std::cin>>in;
+        std::cout<<compute(in)<<"\n";
+    }
 }

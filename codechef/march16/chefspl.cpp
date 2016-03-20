@@ -1,30 +1,31 @@
 #include <iostream>
 #include <algorithm>
 #include <array>
-//Problem with testcases like : abc aabcabc
 bool is_special( const std::string &in ){
-    if( in.empty() ){
+    if( in.size() <= 1 ){
+        //Empty or single char strings are not special
         return false;
     }
     //Freq table optimization
-    //std::array<int, 26> freq;
-    //std::generate(freq.begin(), freq.end(), []{return 0;});
-    //int odds = 0;
-    //for( auto elem : in ){
-        //freq[elem - 'a']++;
-    //}
-    //for( auto elem : freq ){
-        //if(elem%2 != 0){
-            //odds++;
-        //}
-        //if( odds > 1 ){
-            //return false;
-        //}
-    //}
+    //Does not make a large difference
+    std::array<int, 26> freq;
+    std::generate(freq.begin(), freq.end(), []{return 0;});
+    int odds = 0;
+    for( auto elem : in ){
+        freq[elem - 'a']++;
+    }
+    for( auto elem : freq ){
+        if(elem%2 != 0){
+            odds++;
+        }
+        if( odds > 1 ){
+            return false;
+        }
+    }
     if( in.size()%2 == 0 ){
-        //if( odds == 1 ){
-            //return false;
-        //}
+        if( odds == 1 ){
+            return false;
+        }
         auto pivot = in.begin() + in.size()/2;
         if(std::equal(in.begin(), pivot, pivot)){
             return true;
@@ -95,7 +96,7 @@ bool is_special( const std::string &in ){
         if( filled == in.size()/2 ){
             return true;
         }
-   } 
+    } 
     return false;
 }
 int main(){
@@ -114,3 +115,4 @@ int main(){
         std::cout<<"\n";
     }
 }
+
