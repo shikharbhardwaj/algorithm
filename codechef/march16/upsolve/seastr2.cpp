@@ -15,5 +15,6 @@ int main() {
     int T;
     std::cin >> T;
     while (T--) {
+        std::cin >> T;
     }
 }
