@@ -1,7 +1,7 @@
 // Aim : implement a working segment tree
+#include <cmath>
 #include <iostream>
 #include <vector>
-#include <cmath>
 class segtree {
     using data_t = int;
     typedef struct interval {
@@ -60,9 +60,5 @@ class segtree {
             combine(tree[left], tree[right], tree[i]);
         }
     }
-    data_t query(size_t left, size_t right) {}
-    data_t query(size_t i);
-    data_t update(size_t i, data_t val);
-    data_t update(size_t left, size_t right);
 };
 int main() {}

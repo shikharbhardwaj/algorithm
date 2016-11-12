@@ -24,10 +24,8 @@ def BFS(source, adj):
     for val in parent:
         print(parent[val],end=":")
     print("")
-
-def fact(inp):
-    if inp == 1:
-        return 1
-    return inp*fact(inp-1);
 if __name__ == "__main__":
     print("Breadth first search implemented in Python")
+    source = 1
+    adj = {1:[2, 3], 2:[4], 3:[], 4:[]}
+    BFS(source, adj)

@@ -15,7 +15,6 @@ std::vector<result_type> BIT;
 //
 // The representation of the number is characteristic to the bits set
 //
-// BIT[i] stores prefix sums upto the i-th power of 2
 //
 // For initializing ->
 // Add the value of each index to each corresponding node of the BIT
@@ -45,11 +44,28 @@ void init_BIT(const std::vector<result_type> &init) {
         update_BIT(i, init[i]);
     }
 }
+void print_seq(int i) {
+    std::bitset<32> bits;
+    while (i > 0) {
+        bits = i;
+        std::cout << "\n" << bits;
+        i = (i & (i + 1));
+        i -= 1;
+    }
+}
 int main() {
-    std::vector<long long> freq = {0, 2, 1, 1, 3, 2, 3, 4, 5, 6, 7, 8, 9};
-    init_BIT(freq);
-    std::cout << "Sum of elements till 6th element " << query_BIT(6)
-              << std::endl;
-    update_BIT(4, 6);
-    std::cout << "Updated sum " << query_BIT(6);
+    // std::vector<long long> freq = {0, 2, 1, 1, 3, 2, 3, 4, 5, 6, 7, 8, 9};
+    // init_BIT(freq);
+    // for (size_t i = 0; i < BIT.size(); i++) {
+    // std::cout << "[" << i << "] : " << freq[i] << " :: " << BIT[i] << "\n";
+    //}
+    // std::cout << "Sum of elements till 6th element " << query_BIT(6)
+    //<< std::endl;
+    // update_BIT(4, 6);
+    // std::cout << "Updated sum " << query_BIT(6);
+    // int in;
+    // while (std::cin >> in) {
+    // print_seq(in);
+    //}
+    print_seq(7607);
 }
