@@ -18,6 +18,24 @@ template <typename data> class AVL_tree {
     using node = AVL_node<data>;
     node *root = nullptr;
     size_t num = 0;
+    node *transplant(node *u, node *v) {
+        if (u->parent == nullptr) {
+            root = v;
+        } else {
+            if (u->key < u->parent->key) {
+                u->parent->left = v;
+            } else {
+                u->parent->right = v;
+            }
+        }
+        if (v != nullptr) {
+            v->parent = u->parent;
+        }
+        if (u != nullptr) {
+            delete u;
+        }
+        return v;
+    }
     void update_height(node *cur) {
         if (cur == nullptr) {
             return;
@@ -182,7 +200,20 @@ template <typename data> class AVL_tree {
         }
         return cur;
     }
-    void remove(node *needle);
+    void remove(node *needle) {
+        if (needle->left == nullptr) {
+            needle = transplant(needle, needle->right);
+        } else if (needle->right == nullptr) {
+            needle = transplant(needle, needle->left);
+        } else {
+            node *suc = successor(needle);
+            needle->key = suc->key;
+            remove(suc);
+        }
+        if (needle != nullptr) {
+            augment(needle);
+        }
+    }
     std::string to_string() {
         // Give a string representation
         std::stringstream rep;

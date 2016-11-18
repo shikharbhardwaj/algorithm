@@ -128,15 +128,9 @@ void delete_node(bst *tree, node *z) {
     } else if (z->right == NULL) {
         transplant(tree, z, z->left);
     } else {
-        node *y = successor(z);
-        if (y->parent != z) {
-            transplant(tree, y, y->right);
-            y->right = z->right;
-            y->right->parent = y;
-        }
-        transplant(tree, z, y);
-        y->left = z->left;
-        y->left->parent = y;
+        node *suc = successor(z);
+        z->val = suc->val;
+        delete_node(tree, suc);
     }
     tree->N--;
 }

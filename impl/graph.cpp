@@ -2,8 +2,12 @@
 #include <list>
 #include <map>
 #include <vector>
-typedef struct node { int id = 0; } node;
-std::map<int, std::list<node>> adj_list;
+// Implement an undirected graph
+std::map<int, std::vector<int>> adj_list;
 void add_node(int id) { adj_list[id]; }
-void add_edge(int id1, int id2);
+void add_edge(int id1, int id2) {
+    adj_list[id1].push_back(id2);
+    adj_list[id2].push_back(id1);
+}
+int degree(int id) { return adj_list[id].size(); }
 int main() {}
