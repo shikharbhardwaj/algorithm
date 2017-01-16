@@ -15,10 +15,10 @@ std::vector<std::pair<int, int>> in_edges;
 std::set<int> un_visited;
 int N, E, cur_time = 0;
 
-int out_degree(int v) { return graph[v].size(); }
-bool is_connected(int u, int v) {
-    return std::find(graph[u].begin(), graph[u].end(), v) != graph[u].end();
+bool is_connected(int U, int V) {
+    return std::find(graph[U].begin(), graph[U].end(), V) != graph[U].end();
 }
+int out_degree(int v) { return graph[v].size(); }
 void reverse(int u, int v) {
     auto &adj_list = graph[u];
     adj_list.erase(std::remove(adj_list.begin(), adj_list.end(), v),
@@ -27,7 +27,7 @@ void reverse(int u, int v) {
     in_deg[v] -= 1;
     in_deg[u] += 1;
 }
-void dfs_visit_edges(int node) {
+void dfs_visit(int node) {
     // We need to visit this
     cur_time += 1;
     start_time[node] = cur_time;
@@ -35,16 +35,18 @@ void dfs_visit_edges(int node) {
     for (auto v : graph[node]) {
         if (un_visited.find(v) != un_visited.end()) {
             // std::cout << "Tree edge : " << node << ", " << v << "\n";
-            dfs_visit_edges(v);
+            dfs_visit(v);
         } else {
             if (end_time.find(v) == end_time.end() &&
                 start_time.find(v) != start_time.end()) {
                 // std::cout << "Back edge : " << node << ", " << v << '\n';
             } else if (start_time.find(v) != start_time.end()) {
                 // std::cout << "Fwd  edge : " << node << ", " << v << "\n";
+                // std::cout << "Reverse this";
                 fwd_edges.push_back({node, v});
             } else {
                 // std::cout << "Cross edge : " << node << ", " << v << "\n";
+                // std::cout << "Reverse this";
                 cross_edges.push_back({node, v});
             }
         }
@@ -52,7 +54,7 @@ void dfs_visit_edges(int node) {
     cur_time += 1;
     end_time[node] = cur_time;
 }
-void dfs_edges() {
+void dfs() {
     for (int i = 1; i <= N; i++) {
         un_visited.insert(i);
     }
@@ -60,63 +62,8 @@ void dfs_edges() {
         start_time.clear();
         end_time.clear();
         int cur = *un_visited.begin();
-        dfs_visit_edges(cur);
+        dfs_visit(cur);
     }
-}
-void dfs_visit(int node) {
-    un_visited.erase(node);
-    auto i = graph[node].begin();
-    while (i != graph[node].end()) {
-        if (un_visited.find(*i) != un_visited.end()) {
-            dfs_visit(*i);
-        }
-        i++;
-    }
-}
-void dfs() {
-    un_visited.clear();
-    for (int i = 0; i < N; ++i) {
-        un_visited.insert(i + 1);
-    }
-    int cur = *un_visited.begin();
-    dfs_visit(cur);
-}
-bool is_connected() {
-    dfs();
-    if (un_visited.size()) {
-        return false;
-    }
-    std::unordered_map<int, std::list<int>> transpose;
-    for (int i = 1; i <= N; i++) {
-        auto it = graph[i].begin();
-        while (it != graph[i].end()) {
-            if (transpose.find(*it) != transpose.end()) {
-                transpose[*it].push_back(i);
-            } else {
-                transpose[*it] = {i};
-            }
-            it++;
-        }
-    }
-    graph = transpose;
-    dfs();
-    if (un_visited.size()) {
-        return false;
-    }
-    return true;
-}
-bool is_eulerian() {
-    if (!is_connected()) {
-        return false;
-    }
-    bool valid = true;
-    for (int i = 1; i <= N; i++) {
-        if (graph[i].size() != (size_t)in_deg[i]) {
-            valid = false;
-            break;
-        }
-    }
-    return valid;
 }
 int main() {
     std::ios_base::sync_with_stdio(false);
@@ -135,7 +82,8 @@ int main() {
         in_deg[V] += 1;
         in_edges.push_back({U, V});
     }
-    dfs_edges();
+    dfs();
+    std::reverse(cross_edges.begin(), cross_edges.end());
     for (auto edge : fwd_edges) {
         int u = edge.first;
         int v = edge.second;
@@ -146,8 +94,18 @@ int main() {
     for (auto edge : cross_edges) {
         int u = edge.first;
         int v = edge.second;
+        if (out_degree(u) > in_deg[u]) {
+            reverse(u, v);
+        }
     }
-    if (is_eulerian()) {
+    bool valid = true;
+    for (int i = 1; i <= N; i++) {
+        if (graph[i].size() != (size_t)in_deg[i]) {
+            valid = false;
+            break;
+        }
+    }
+    if (valid) {
         std::cout << "YES\n";
         for (auto elem : in_edges) {
             int U = elem.first;
