@@ -1,9 +1,9 @@
 # Ignore all
 *
-# Unignore all directories
-!*/
 # Unignore all Files with extensions
 !*.*
+# Unignore all directories
+!*/
 # Ignore files with specific extensions
 *.exe
 *.pyc
