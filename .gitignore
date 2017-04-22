@@ -1,0 +1,12 @@
+# Ignore all
+*
+# Unignore all directories
+!*/
+# Unignore all Files with extensions
+!*.*
+# Ignore files with specific extensions
+*.exe
+*.pyc
+*~
+*.swp
+*.swo
