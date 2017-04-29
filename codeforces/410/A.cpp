@@ -53,5 +53,5 @@ int main(){
 #ifndef ONLINE_JUDGE
 	cin.rdbuf(cinbuf);    // restore
 	cout.rdbuf(coutbuf); // restore
-#endif	
+#endif
 }
