@@ -6,7 +6,7 @@
 #include <prettyprint/prettyprint.hpp>
 #endif
 
-#define FOR(i, n) for(size_t i = 0; i < n; ++i)
+#define FOR(i, n) for(int i = 0; i < n; ++i)
 #define TEST int T; std::cin >> T; while(T--)
 
 using ll = long long;
@@ -17,24 +17,21 @@ using vull = std::vector<ull>;
 
 using namespace std;
 
-int lcs_length(const string& a, const string& b){
-	vector<vector<int>> state(a.length() + 1);
-	vector<vector<int>> rebuild(a.length() + 1);
-	FOR(i, a.size() + 1){
-		state[i].assign(b.size() + 1, 0);
-	}
-	// Solve maximization problem
-	FOR(i, a.size()){
-		FOR(j, b.size()){
-			if(a[i] == b[j]){
-				state[i + 1][j + 1] = state[i][j] + 1;
-			} else{
-				state[i + 1][j + 1] = max(state[i][j + 1], state[i + 1][j]);
-			}
-		}
-	}
-	return state[a.size()][b.size()];
-}
+/*
+	Optimal task scheduling algorithm
+	
+	Given a list of tasks with finish and end times, find the max number of tasks you 
+	can perform with the constraint that you can perform 1 task at a time.
+
+
+	Algorithm : 
+	Select the task with the nearest end time.
+
+	Correctness : 
+	The proposed algorithm selects tasks with the nearest end time. This optimizes the
+	 number of tasks available after the current task has ended, which in turn leads to 
+	 a globally optimal solution.
+*/
 
 int main(){
 	ios_base::sync_with_stdio(false);
@@ -44,13 +41,6 @@ int main(){
 	auto cinbuf = cin.rdbuf(fin.rdbuf());    // save and redirect
 	auto coutbuf = cout.rdbuf(fout.rdbuf()); // save and redirect
 #endif	
-	TEST{
-		int t;
-		string str1, str2;
-		cin >> t >> t;
-		cin >> str1 >> str2;
-		cout << lcs_length(str1, str2) << endl;
-	}
 #ifndef ONLINE_JUDGE
 	cin.rdbuf(cinbuf);    // restore
 	cout.rdbuf(coutbuf); // restore

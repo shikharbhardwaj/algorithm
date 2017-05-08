@@ -17,23 +17,19 @@ using vull = std::vector<ull>;
 
 using namespace std;
 
-int lcs_length(const string& a, const string& b){
-	vector<vector<int>> state(a.length() + 1);
-	vector<vector<int>> rebuild(a.length() + 1);
-	FOR(i, a.size() + 1){
-		state[i].assign(b.size() + 1, 0);
-	}
-	// Solve maximization problem
-	FOR(i, a.size()){
-		FOR(j, b.size()){
-			if(a[i] == b[j]){
-				state[i + 1][j + 1] = state[i][j] + 1;
-			} else{
-				state[i + 1][j + 1] = max(state[i][j + 1], state[i + 1][j]);
-			}
-		}
-	}
-	return state[a.size()][b.size()];
+int min_diff(const vi& nums) {
+	// How would you solve this problem?
+	// What decision, do we keep this element in the first set or the second one?
+	int sum = accumulate(nums.begin(), nums.end(), 0);
+	vector<vi> state(nums.size() + 1);
+	for_each(state.begin(), state.end(), [&](vi& in){
+		in.resize(sum + 1, 0);
+	});
+	FOR()
+	for_each(state.begin(), state.end(), [&](vi& in){
+		cout << in << endl;
+	});
+	return 0;
 }
 
 int main(){
@@ -45,11 +41,13 @@ int main(){
 	auto coutbuf = cout.rdbuf(fout.rdbuf()); // save and redirect
 #endif	
 	TEST{
-		int t;
-		string str1, str2;
-		cin >> t >> t;
-		cin >> str1 >> str2;
-		cout << lcs_length(str1, str2) << endl;
+		size_t N;
+		cin >> N;
+		vector<int> nums(N);
+		FOR(i, N){
+			cin >> nums[i];
+		}
+		cout << min_diff(nums) << endl;
 	}
 #ifndef ONLINE_JUDGE
 	cin.rdbuf(cinbuf);    // restore
