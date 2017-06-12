@@ -41,43 +41,16 @@ int main(){
 				dist[i][j] = 1e5;
 			}
 		}
-		FOR(i, n){
-			FOR(j, m){
+		FOR(i, n) {
+			FOR(j, m) {
 				if(grid1[i][j] == max_val){
 					dist[i][j] = 0;
 				}
 			}
 		}
+		cout << dist << endl;
 		FOR(i, n){
 			FOR(j, m){
-				if(i > 0){
-					dist[i][j] = min(dist[i - 1][j] + 1, dist[i][j]);
-				}
-				if(i != n - 1){
-					dist[i][j] = min(dist[i + 1][j] + 1, dist[i][j]);
-				}
-				if(j > 0){
-					dist[i][j] = min(dist[i][j - 1] + 1, dist[i][j]);
-				}
-				if(j != m - 1){
-					dist[i][j] = min(dist[i][j + 1] + 1, dist[i][j]);
-				}
-				if(i > 0 && j > 0){
-					dist[i][j] = min(dist[i - 1][j - 1] + 1, dist[i][j]);
-				}
-				if(i > 0 && j != m - 1){
-					dist[i][j] = min(dist[i - 1][j + 1] + 1, dist[i][j]);
-				}
-				if(i != n - 1 && j > 0){
-					dist[i][j] = min(dist[i + 1][j - 1] + 1, dist[i][j]);
-				}
-				if(i != n - 1 && j != m - 1){
-					dist[i][j] = min(dist[i + 1][j + 1] + 1, dist[i][j]);
-				}	
-			}
-		}
-		for (int i = n - 1; i >= 0; --i) {
-			for (int j = m - 1; j >= 0; --j) {
 				if(i > 0){
 					dist[i][j] = min(dist[i - 1][j] + 1, dist[i][j]);
 				}
