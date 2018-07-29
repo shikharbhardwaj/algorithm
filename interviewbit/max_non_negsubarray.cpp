@@ -16,6 +16,7 @@ using pii = std::pair<int, int>;
 using namespace std;
 
 
+// Simple, ad-hoc, brute force
 vector<int> maxset(const vector<int> &A) {
 	long long max_start, max_end, max_length = A.size();
 	long long max_sum = -1, cur_sum = 0, cur_start = 0;

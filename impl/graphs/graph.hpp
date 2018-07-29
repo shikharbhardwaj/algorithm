@@ -4,15 +4,16 @@
 #include <unordered_map>
 #include <vector>
 namespace graph_lib {
-namespace graph_types {
-struct unordered;
-struct ordered;
+namespace edge_types {
+struct directed;
+struct undirected;
 }
+
 template <typename id_type, typename edge_type, typename graph_type,
           typename Enable = void>
 class graph;
 
-template <typename id_type, typename edge_type, typename graph_type>
+template <typename id_type, typename edge_type>
 class graph<
     id_type, edge_type, graph_type,
     typename std::enable_if<
