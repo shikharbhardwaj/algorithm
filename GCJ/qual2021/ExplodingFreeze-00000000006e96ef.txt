@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+#define int long long
+using pii=std::pair<int,int>;
+using namespace std;
+
+const int maxn = 105, maxq = 1e4 + 5;
+
+int t, p, cnt[maxq], solved[maxn][maxq], have[maxn], mean[maxn], deviation[maxn];
+int32_t main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cin >> t >> p;
+    for(int cases = 0; cases < t; cases++)
+    {
+        for(int j = 0; j < 10000; j++)
+            cnt[j] = 0;
+        for(int i = 0; i < 100; i++)
+            deviation[i] = mean[i] = have[i] = 0;
+        for(int i = 0; i < 100; i++)
+        {
+            string s;
+            cin >> s;
+            for(int j = 0; j < 10000; j++)
+            {
+                solved[i][j] = s[j] - '0';
+                cnt[j] += solved[i][j];
+            }
+        }
+        for(int i = 0; i < 100; i++)
+        {
+            for(int j = 0; j < 10000; j++)
+                if(solved[i][j])
+                {
+                    mean[i] += cnt[j];
+                    have[i]++;
+                }
+            if(!have[i])
+                continue;
+            // rounding shouldn't matter
+            mean[i] /= have[i];
+            for(int j = 0; j < 10000; j++)
+                if(solved[i][j])
+                {
+                    int diff = abs(cnt[j] - mean[i]);
+                    deviation[i] += diff * diff;
+                }
+            deviation[i] /= have[i];
+        }
+        int take = 0;
+        for(int i = 1; i < 100; i++)
+            if(deviation[i] > deviation[take])
+                take = i;
+        cout << "Case #" << (cases + 1) << ": " << take + 1 << "\n";
+    }
+    return 0;
+}

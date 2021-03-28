@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+#define int long long
+using pii=std::pair<int,int>;
+using namespace std;
+
+const int maxn = 1005;
+
+int t, x, y, dp[maxn][2], cost[2][2];
+char vals[2] = {'C', 'J'};
+string s;
+int32_t main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cin >> t;
+    for(int cases = 0; cases < t; cases++)
+    {
+        cin >> x >> y >> s;
+        cost[0][0] = cost[1][1] = 0;
+        cost[0][1] = x;
+        cost[1][0] = y;
+        for(int i = 0; i <= s.length(); i++)
+            for(int j = 0; j < 2; j++)
+                dp[i][j] = 2e18;
+        for(int j = 0; j < 2; j++)
+            if(s[0] == vals[j] || s[0] == '?')
+                dp[0][j] = 0;
+        for(int i = 1; i < s.length(); i++)
+            for(int j = 0; j < 2; j++)
+                for(int k = 0; k < 2; k++)
+                    if(s[i] == vals[k] || s[i] == '?')
+                        dp[i][k] = min(dp[i][k], dp[i- 1][j] + cost[j][k]);
+        cout << "Case #" << (cases + 1) << ": " << min(dp[s.length() - 1][0], dp[s.length() - 1][1]) << "\n";
+    }
+    return 0;
+}
