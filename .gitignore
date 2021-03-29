@@ -10,3 +10,8 @@
 *~
 *.swp
 *.swo
+in.txt
+out.txt
+.local
+*input.txt
+*output.txt
