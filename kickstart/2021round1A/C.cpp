@@ -28,7 +28,7 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
 #ifndef ONLINE_JUDGE
-    ifstream fin("ts1_input.txt");
+    ifstream fin("in.txt");
     ofstream fout("out.txt");
     auto cinbuf = cin.rdbuf(fin.rdbuf());    // save and redirect
     auto coutbuf = cout.rdbuf(fout.rdbuf()); // save and redirect

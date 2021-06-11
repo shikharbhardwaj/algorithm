@@ -20,63 +20,65 @@ using pii = std::pair<int, int>;
 using pll = std::pair<ll, ll>;
 using namespace std;
 
-struct Edge {
-    int v, w;
-};
+int bitwise_not(int x) {
+    bitset<32> bs(x);
+    bs.flip();
 
+    // Ignore all bits which appeared after msb.
+    int leading_zeros = __builtin_clz(x);
+
+    for (int i = 0; i < leading_zeros; ++i) bs.reset(i);
+
+    return bs.to_ulong();
+}
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
+   ios_base::sync_with_stdio(false);
+   cin.tie(nullptr);
 #ifndef ONLINE_JUDGE
     ifstream fin("in.txt");
     ofstream fout("out.txt");
     auto cinbuf = cin.rdbuf(fin.rdbuf());    // save and redirect
     auto coutbuf = cout.rdbuf(fout.rdbuf()); // save and redirect
-#endif	
+#endif     
     CASE {
-        int n; cin >> n;
+        string S, E;
 
-        vector<vector<int>> vals(n, vector<int>(n)), weights(n, vector<int>(n));
+        cin >> S >> E;
 
-        FOR(i, n) {
-            FOR(j, n) {
-                cin >> vals[i][j];
-            }
-        }
+        int s = stoi(S, 0, 2), e = stoi(E, 0, 2);
 
-        FOR(i, n) {
-            FOR(j, n) {
-                cin >> weights[i][j];
-            }
-        }
+        int ans = -1;
 
-        vector<vector<int>> graph(2 * n);
-
-        FOR(i, n) {
-            FOR(j, n) {
-                if (vals[i][j] == -1) {
-                    graph[i].emplace_back(n + j);
-                    graph[n + j].emplace_back(i);
-                }
-            }
-        }
-
-        auto get_remaining = [&]() {
-            int remaining = 0;
-
-            FOR(i, n) {
-                if (graph[i].size() > 1) ++remaining;
+        function<void(int, int)> visit = [&](int x, int d = 0) {
+            if (x == e) {
+                if (ans == -1) ans = d;
+                else ans = min(ans, d);
+                return;
             }
 
-            return remaining;
+            visit(2 * x, d + 1);
+            visit(bitwise_not(x), d + 1);
         };
 
-        int cost = 0;
+        visit(s, 0);
 
+        cout << "Case #" << case_num << ": " << (ans) << endl;
     }
 #ifndef ONLINE_JUDGE
     cin.rdbuf(cinbuf);    // restore
     cout.rdbuf(coutbuf); // restore
-#endif	
+#endif     
 }
+
+/*
+
+0
+1
+10
+100
+011
+110
+
+
+*/
