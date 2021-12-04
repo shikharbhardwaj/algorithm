@@ -29,3 +29,9 @@ out.txt
 
 # XCode debug symbols
 *.dSYM
+
+# WSL
+*:Zone.Identifier
+
+# Archives
+*.zip
