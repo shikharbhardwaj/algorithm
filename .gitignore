@@ -26,3 +26,6 @@ out.txt
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 **/.history
+
+# XCode debug symbols
+*.dSYM
