@@ -15,6 +15,10 @@
         "regex": "cpp",
         "valarray": "cpp",
         "ostream": "cpp",
-        "iosfwd": "cpp"
+        "*.tcc": "cpp",
+        "optional": "cpp",
+        "functional": "cpp",
+        "istream": "cpp",
+        "variant": "cpp"
     }
 }

@@ -22,34 +22,15 @@
             "environment": [],
             "console": "externalTerminal",
             "MIMode": "gdb",
-            // "setupCommands": [
-            //     {
-            //         "description": "Enable pretty-printing for gdb",
-            //         "text": "-enable-pretty-printing",
-            //         "ignoreFailures": true
-            //     }
-            // ],
-            "preLaunchTask": "C/C++: g++ build active file (macos)",
-            "miDebuggerPath": "/usr/local/bin/gdb"
-        },
-        {
-            "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "externalConsole": false,
-            "logging": {
-                "trace": true
-            },
-            "name": "lldb - Build and debug active file (macos)",
-            "type": "cppdbg",
-            "request": "launch",
-            "args": [
-                "-I",
-                "/Users/shikharbhardwaj/custom/include"
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
             ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "MIMode": "lldb",
-            "preLaunchTask": "C/C++: g++ build active file (macos)",
+            "preLaunchTask": "C/C++: g++ build active file",
+            "miDebuggerPath": "/bin/gdb"
         }
     ]
 }
