@@ -72,7 +72,7 @@ int main() {
         if (space_split[0] == "fold") {
             auto fold_values = split(space_split[2], '=');
 
-            auto fold_axis = (fold_values[0] == "x") ? FoldAxis::FOLD_Y : FoldAxis::FOLD_X;
+            auto fold_axis = (fold_values[0] == "x") ? FoldAxis::FOLD_X : FoldAxis::FOLD_Y;
             auto fold_coord = stoi(fold_values[1]);
             folds.emplace_back(fold_axis, fold_coord);
         } else {
@@ -105,59 +105,124 @@ int main() {
         }
     };
 
-    auto fold_y = [&](int coord) {
-        max_y = max(max_y - coord, coord);
+    auto reverse_columns = [&]() {
+        int left = 0, right = max_x;
+    
+        while (left < right) {
+            for (int i = 0; i <= max_y; ++i) {
+                swap(grid[i][left], grid[i][right]);
+            }
+            ++left, --right;
+        }
+    };
+
+    auto reverse_rows = [&]() {
+        reverse(ALL(grid));
+    };
+
+    auto fold_x = [&](int coord) {
+        if (coord < max_x / 2) {
+            cout << "Reversing columns" << endl;
+            reverse_columns();
+            coord = max_x - coord;
+        }
+
+        int prev_max_x = max_x;
+        int diff = max_x - coord;
+        int copy_col_cnt = max_x - 2 * diff;
+        int overlap_col_cnt = diff;
+
+        max_x = max(max_x - coord, coord) - 1;
         auto next_grid = new_grid();
 
         cout << "Folding along x=" << coord << endl;
         // show_grid();
 
         // Copy lines first.
-        int new_col = 0, prev_col = max_x;
+        int cur_col = 0;
+        int new_col = 0, prev_col = 0;
 
-        while (prev_col >= coord) {
+        while (cur_col < copy_col_cnt) {
             for (int y = 0; y <= max_y; ++y) {
                 next_grid[y][new_col] = grid[y][prev_col];
             }
             ++new_col;
+            ++prev_col;
+            ++cur_col;
+        }
+
+
+        cout << "Diff: " << diff << endl;
+        cout << "Overlap col count: " << overlap_col_cnt << endl;
+        cout << "Copy col count: " << copy_col_cnt << endl;
+
+        prev_col = prev_max_x;
+
+        while (cur_col <= max_x) {
+            for (int i = 0; i <= max_y; ++i) {
+                next_grid[i][cur_col] = max(grid[i][cur_col], grid[i][prev_col]);
+            }
+            ++cur_col;
             --prev_col;
         }
 
-        for (int y = 0; y <= max_y; ++y) {
-            for (int x = 0; x < coord; ++x) {
-                next_grid[y][x] = max(next_grid[y][x], grid[y][x]);
-            }
-        }
-
         grid = next_grid;
+        show_grid();
     };
 
-    auto fold_x = [&](int coord) {
-        max_x = max(max_x - coord, coord);
+    auto fold_y = [&](int coord) {
+        if (coord < max_y / 2) {
+            cout << "Reversing rows" << endl;
+            reverse_rows();
+            coord = max_y - coord;
+        }
+
+        int prev_max_y = max_y;
+        int diff = max_y - coord;
+        int copy_row_cnt = max_y - 2 * diff;
+        int overlap_row_cnt = diff;
+
+        max_y = max(max_y - coord, coord) - 1;
         auto next_grid = new_grid();
 
         cout << "Folding along y=" << coord << endl;
         // show_grid();
 
         // Copy lines first.
-        int new_line = 0, prev_line = max_y;
+        int cur_row = 0;
+        int new_row = 0, prev_row = 0;
 
-        while (prev_line >= coord) {
+        while (cur_row < copy_row_cnt) {
             for (int x = 0; x <= max_x; ++x) {
-                next_grid[new_line][x] = grid[prev_line][x];
+                next_grid[new_row][x] = grid[prev_row][x];
             }
-            ++new_line;
-            --prev_line;
+            ++new_row;
+            ++prev_row;
+            ++cur_row;
         }
 
-        for (int y = 0; y < coord; ++y) {
-            for (int x = 0; x <= max_x; ++x) {
-                next_grid[y][x] = max(next_grid[y][x], grid[y][x]);
+
+        cout << "Diff: " << diff << endl;
+        cout << "Overlap col count: " << overlap_row_cnt << endl;
+        cout << "Copy col count: " << copy_row_cnt << endl;
+
+        prev_row = prev_max_y;
+
+        while (cur_row <= max_y) {
+            for (int i = 0; i <= max_x; ++i) {
+                next_grid[cur_row][i] = max(grid[cur_row][i], grid[prev_row][i]);
             }
+            ++cur_row;
+            --prev_row;
         }
 
         grid = next_grid;
+        show_grid();
     };
+
+    cout << "max_y: " << max_y << endl;
+    cout << "Initial grid: " << endl;
+    show_grid();
 
     // Do a fold.
     for (auto [axis, coord] : folds) {
@@ -180,7 +245,7 @@ int main() {
     }
 
     // Remove all rows with 0 values.
-    // cout << ans << endl;
+    cout << ans << endl;
 #ifndef ONLINE_JUDGE
     cin.rdbuf(cinbuf);    // restore
     cout.rdbuf(coutbuf); // restore
