@@ -41,5 +41,22 @@
             "}",
 		],
 		"description": "C++ single-file program template."
-	}
+	},
+	"split-string": {
+		"prefix": "split",
+		"body": [
+                  "vector<string> split(const string& str, char delim=' ') {",
+                  "    istringstream ss(str);",
+                  "    string token;",
+                  "    vector<string> tokens;",
+                  "",
+                  "    while (getline(ss, token, delim)) {",
+                  "        tokens.push_back(token);",
+                  "    }",
+                  "",
+                  "    return tokens;",
+                  "}",
+		],
+		"description": "Split string by delimiter"
+	},
 }

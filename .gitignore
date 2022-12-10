@@ -12,6 +12,7 @@
 *.swo
 in.txt
 out.txt
+in*.txt
 .local
 *input.txt
 *output.txt

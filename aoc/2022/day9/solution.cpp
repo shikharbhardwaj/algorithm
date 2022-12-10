@@ -272,39 +272,30 @@ void solve_part2() {
         switch (line[0]) {
             case 'L': while(steps--) {
                 rope.move_head_left();
-                // cout << rope << endl;
             }
             break;
             case 'U':
             while (steps--)
             {
                 rope.move_head_up();
-                // cout << rope << endl;
             }
             break;
             case 'R':
             while (steps--)
             {
                 rope.move_head_right();
-                // cout << rope << endl;
             }
             break;
             case 'D':
             while (steps--)
             {
                 rope.move_head_down();
-                // cout << rope << endl;
             }
             break;
         }
-        // cout << endl;
     }
 
     cout << rope.unique_tail_positions.size() << endl;
-
-    // for (auto pos : rope.unique_tail_positions) {
-    //     cout << pos << endl;
-    // }
 }
 
 int main() {
