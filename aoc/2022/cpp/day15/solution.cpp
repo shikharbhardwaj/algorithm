@@ -278,11 +278,6 @@ int main() {
     auto cinbuf = cin.rdbuf(fin.rdbuf());    // save and redirect
     auto coutbuf = cout.rdbuf(fout.rdbuf()); // save and redirect
 #endif
-/*
-874397
-1622698
-
-*/
     // solve_part1();
     solve_part2();
 #ifndef ONLINE_JUDGE

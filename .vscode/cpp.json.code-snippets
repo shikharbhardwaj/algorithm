@@ -51,6 +51,7 @@
                   "    vector<string> tokens;",
                   "",
                   "    while (getline(ss, token, delim)) {",
+                  "        if (token.empty()) continue;",
                   "        tokens.push_back(token);",
                   "    }",
                   "",
@@ -58,5 +59,19 @@
                   "}",
 		],
 		"description": "Split string by delimiter"
+	},
+	"Point2d": {
+		"prefix": "2dpoint",
+		"body": [
+                  "struct Point2D {",
+                  "    int x, y;",
+                  "",
+                  "    Point2D(int x_, int y_) : x(x_), y(y_) {}",
+                  "};",
+                  "ostream& operator<<(ostream& os, const Point2D& point) {",
+                  "    return os << \"Point2D(x=\" << point.x << \", y=\" << point.y << \")\";",
+                  "}",
+		],
+		"description": "2D point struct"
 	},
 }
