@@ -83,23 +83,21 @@ int main() {
     cout << nodes << endl;
     cout << flow_rate_by_idx << endl;
 
-    using State = tuple<int, int, ull, int, ull>;
-    map<State, int> dp;
+    using Result = int;
+    using State = tuple<int, int, ull, int>;
+    map<State, Result> dp;
 
     ull progress_counter = 0;
     ull progress_batch = 1e6;
 
-    /*
-    Cases:
-    1. Elephant and me on the same node: elephant moves onto the neighbour, and I try to see if
-    turning on the current valve is useful.
-    2. Elephant and me on different nodes: both explore with/without turning on the current valve.
-    */
+    const int max_time = 26;
 
-    function<ull(int, int, ull, int, ull)> visit = [&](int node0_idx, int node1_idx, ull cur, int t, ull bits) -> ull {
-        if (t <= 0) return cur;
+    function<Result(int, int, ull, int)> visit = [&](int node0_idx, int t, ull bits, int num_players) -> Result {
+        if (t == 0) {
+            return num_players > 0 ? visit(0, max_time, bits, num_players-1) : 0;
+        }
         
-        auto cur_state = make_tuple(node0_idx, node1_idx, cur, t, bits);
+        auto cur_state = make_tuple(node0_idx, t, bits, num_players);
         // cout << cur_state << endl;
 
         if (dp.count(cur_state) != 0) {
@@ -113,33 +111,30 @@ int main() {
         }
 
         // cout << "Visit: " << cur_state << endl;
-        ull best = cur;
+        Result best = 0;
 
-       string node0 = nodes[node0_idx];
-       string node1 = nodes[node1_idx];
+        string node0 = nodes[node0_idx];
+
+        if (!(bits & (1ull << node0_idx)) && flow_rate_by_idx[node0_idx] > 0) {
+            auto next_bits = bits | (1ull << node0_idx);
+            best = max(best, (t - 1) * flow_rate_by_idx[node0_idx] + visit(node0_idx, t - 1, next_bits, num_players));
+        }
 
         for (auto nei0 : graph[node0]) {
             int nei0_idx = lower_bound(ALL(nodes), nei0) - begin(nodes);
-            best = max(best, visit(nei0_idx, node1_idx, cur, t - 1, bits));
+            best = max(best, visit(nei0_idx, t - 1, bits, num_players));
         }
 
-        if (!(bits & (1 << node0_idx)) && flow_rate_by_idx[node0_idx] > 0) {
-            cur += (t - 1) * flow_rate[node0];
-
-            bits |= (1 << node0_idx);
-
-            for (auto nei0 : graph[node0]) {
-                int nei0_idx = lower_bound(ALL(nodes), nei0) - begin(nodes);
-                best = max(best, visit(nei0_idx, node1_idx, cur, t - 2, bits));
-            }
-        }
+        // while (t--) {
+        //     best = max(best, visit(node0_idx, cur, t, bits, num_players));
+        // }
 
         return dp[cur_state] = best;
     };
 
-    cout << graph << endl;
-    cout << flow_rate << endl;
-    cout << visit(0, 0, 0, 30, 0) << endl;
+    auto first_pass_result = visit(0, max_time, 0, 1);
+    cout << first_pass_result << endl;
+
 #ifndef ONLINE_JUDGE
     cin.rdbuf(cinbuf);    // restore
     cout.rdbuf(coutbuf); // restore
