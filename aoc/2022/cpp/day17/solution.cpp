@@ -68,11 +68,12 @@ using Position = pair<int, int>;
 struct Game {
     int max_height = 0;
     int t = 0;
-    string movements;
+    deque<char> movements;
     Grid screen;
 
-    Game(const string& movements_) : movements(movements_) {
+    Game(const string& input) {
         screen.assign(7, ".......");
+        movements = {ALL(input)};
     }
 
     void show() {
@@ -83,14 +84,20 @@ struct Game {
         cout << endl << endl;
     }
 
+    int _get_start_y() {
+        return (screen.size() - 1 - max_height) - 3;
+    }
+
     void _copy_shape() {
-        int start_y = max_height + 3;
-        int start_x = 2;
+        int start_y = _get_start_y();
         auto shape = shapes[static_cast<Shape>(t % 5)];
 
-        while (start_y + shape.size() >= screen.size()) {
-            screen.push_back(".......");
+        while (start_y - (int) shape.size() < 0) {
+            screen.insert(screen.begin(), ".......");
+            start_y = _get_start_y();
         }
+
+        int start_x = 2;
 
         int y = start_y;
         for (int r = shape.size(); r-->0;) {
@@ -179,19 +186,26 @@ struct Game {
     }
 
     void _move() {
-        Position cur_pos = {max_height + 3, 2};
+        Position cur_pos = {_get_start_y(), 2};
         Position new_pos = cur_pos;
 
         auto shape = shapes[static_cast<Shape>(t % 5)];
 
         do {
-            cur_pos = _move_sideways(new_pos, shape, movements[t % (movements.size())] == '<');
-            show();
+            char current = movements.front();
+            bool left = current == '<';
+            movements.pop_front();
+            movements.push_back(current);
+
+            cur_pos = _move_sideways(new_pos, shape, left);
+            // show();
             new_pos = _move_down(cur_pos, shape);
-            show();
+            // show();
         } while (cur_pos != new_pos);
 
-        max_height = max(max_height, new_pos.first + (int) shape.size());
+        int height = (screen.size() - 1 - new_pos.first) + shape.size();
+        max_height = max(max_height, height);
+        // cout << "Updated max height: " << max_height << endl;
     }
 
     void tick() {
@@ -205,7 +219,7 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
 #ifndef ONLINE_JUDGE
-    ifstream fin("in.txt");
+    ifstream fin("in2.txt");
     ofstream fout("out.txt");
     auto cinbuf = cin.rdbuf(fin.rdbuf());    // save and redirect
     auto coutbuf = cout.rdbuf(fout.rdbuf()); // save and redirect
@@ -213,9 +227,14 @@ int main() {
     string input; cin >> input;
 
     Game game(input);
-    game.show();
-    game.tick();
-    game.show();
+
+    int num_rocks = 2022;
+
+    while (num_rocks--) {
+        game.tick();
+    }
+
+    cout << game.max_height << endl;
 
 #ifndef ONLINE_JUDGE
     cin.rdbuf(cinbuf);    // restore
