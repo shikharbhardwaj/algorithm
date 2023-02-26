@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "algorithm"
+  site-url: "https://shikharbhardwaj.github.io/algorithm"
+  description: "A collection of simple implementations and solutions to problems on online judges."
+  repo-branch: master
+  repo-url: "https://github.com/shikharbhardwaj/algorithm"
