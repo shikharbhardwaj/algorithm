@@ -9,6 +9,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.8,<3.11"
 mlflow = {extras = ["extras"], version = "^2.2.1"}
+datasets = "^2.13.0"
+jupyterlab-quarto = "^0.1.45"
 
 [tool.poetry.group.dev.dependencies]
 notebook = "^6.5.2"
